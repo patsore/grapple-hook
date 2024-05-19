@@ -1,0 +1,65 @@
+[gd_scene load_steps=10 format=3 uid="uid://balyp5pugacla"]
+
+[ext_resource type="Script" path="res://camera_controller.gd" id="3_a0rtg"]
+[ext_resource type="Material" uid="uid://dm157s57mfhfe" path="res://addons/kenney_prototype_tools/materials/dark/material_02.tres" id="3_u2hkq"]
+[ext_resource type="Script" path="res://character_controller.gd" id="3_y4kdh"]
+[ext_resource type="Material" uid="uid://dxlnifhgft6h5" path="res://addons/kenney_prototype_tools/materials/green/material_01.tres" id="4_nxy4k"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_xaajt"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_wujep"]
+sky_material = SubResource("ProceduralSkyMaterial_xaajt")
+
+[sub_resource type="Environment" id="Environment_dlxy4"]
+background_mode = 2
+sky = SubResource("Sky_wujep")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_m5mmo"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_yby36"]
+
+[node name="Main" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_dlxy4")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Floor" type="CSGBox3D" parent="."]
+use_collision = true
+size = Vector3(30, 1, 30)
+material = ExtResource("3_u2hkq")
+
+[node name="Player" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+floor_block_on_wall = false
+script = ExtResource("3_y4kdh")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
+shape = SubResource("CapsuleShape3D_m5mmo")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Player"]
+mesh = SubResource("CapsuleMesh_yby36")
+
+[node name="Head" type="Node3D" parent="Player"]
+script = ExtResource("3_a0rtg")
+sens_x = 0.001
+sens_y = 0.001
+
+[node name="MainCamera" type="Camera3D" parent="Player/Head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.46817, 0)
+
+[node name="WeaponCamera" type="Camera3D" parent="Player/Head"]
+visible = false
+
+[node name="Wall" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 6, 0)
+material_override = ExtResource("4_nxy4k")
+use_collision = true
+size = Vector3(1, 12, 15)

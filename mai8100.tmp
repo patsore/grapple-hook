@@ -1,0 +1,59 @@
+[gd_scene load_steps=10 format=3 uid="uid://balyp5pugacla"]
+
+[ext_resource type="Material" uid="uid://cehjio2370tmg" path="res://addons/kenney_prototype_tools/materials/dark/material_03.tres" id="2_6opcd"]
+[ext_resource type="Script" path="res://camera_controller.gd" id="3_a0rtg"]
+[ext_resource type="Material" uid="uid://dm157s57mfhfe" path="res://addons/kenney_prototype_tools/materials/dark/material_02.tres" id="3_u2hkq"]
+[ext_resource type="Script" path="res://character_controller.gd" id="3_y4kdh"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_xaajt"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_wujep"]
+sky_material = SubResource("ProceduralSkyMaterial_xaajt")
+
+[sub_resource type="Environment" id="Environment_dlxy4"]
+background_mode = 2
+sky = SubResource("Sky_wujep")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_m5mmo"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_yby36"]
+
+[node name="Main" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_dlxy4")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Floor" type="CSGBox3D" parent="."]
+material_override = ExtResource("2_6opcd")
+use_collision = true
+size = Vector3(30, 1, 30)
+material = ExtResource("3_u2hkq")
+
+[node name="Node3D" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+script = ExtResource("3_y4kdh")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Node3D"]
+shape = SubResource("CapsuleShape3D_m5mmo")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D"]
+mesh = SubResource("CapsuleMesh_yby36")
+
+[node name="Head" type="Node3D" parent="Node3D"]
+script = ExtResource("3_a0rtg")
+sens_x = 0.001
+sens_y = 0.001
+
+[node name="MainCamera" type="Camera3D" parent="Node3D/Head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.46817, 0)
+
+[node name="WeaponCamera" type="Camera3D" parent="Node3D/Head"]
+visible = false

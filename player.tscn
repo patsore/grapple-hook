@@ -1,0 +1,101 @@
+[gd_scene load_steps=9 format=3 uid="uid://cyk3hy3amh3yg"]
+
+[ext_resource type="Script" path="res://character_controller.gd" id="1_7tgdb"]
+[ext_resource type="Script" path="res://camera_controller.gd" id="2_mlg4r"]
+[ext_resource type="Script" path="res://addons/godot-polyliner/Line3D/LinePath3D.gd" id="3_ayxa7"]
+[ext_resource type="Shader" path="res://addons/godot-polyliner/shaders/parallax/raymarch_chain.gdshader" id="4_o6b44"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_m5mmo"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_yby36"]
+
+[sub_resource type="Curve3D" id="Curve3D_3a8hw"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.01, 0, 0),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_r7cpj"]
+render_priority = 0
+shader = ExtResource("4_o6b44")
+shader_parameter/twirl_aspect = 8.0
+shader_parameter/extra_angle = 0.0
+shader_parameter/line_width = 0.025
+shader_parameter/link_radius = 0.15
+shader_parameter/link_thickness = 0.05
+shader_parameter/repeat_size = 1.0
+shader_parameter/repeat_size_b = 0.1
+shader_parameter/roughness = 0.25
+shader_parameter/metallic = 1.0
+shader_parameter/color = Color(0.1, 0.1, 0.1, 1)
+
+[node name="Player" type="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.79578, 2, 7)
+collision_layer = 128
+collision_mask = 129
+floor_block_on_wall = false
+script = ExtResource("1_7tgdb")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_m5mmo")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_yby36")
+
+[node name="Head" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.468, 0)
+script = ExtResource("2_mlg4r")
+sens_x = 0.001
+sens_y = 0.001
+
+[node name="MainCamera" type="Camera3D" parent="Head"]
+
+[node name="Control" type="Control" parent="Head/MainCamera"]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="Head/MainCamera/Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -1.5
+offset_top = -1.5
+offset_right = 1.5
+offset_bottom = 1.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="WeaponCamera" type="Camera3D" parent="Head"]
+visible = false
+
+[node name="LeftCast" type="RayCast3D" parent="."]
+target_position = Vector3(-0.75, 0, 0)
+collide_with_areas = true
+
+[node name="RightCast" type="RayCast3D" parent="."]
+target_position = Vector3(0.75, 0, 0)
+collide_with_areas = true
+
+[node name="GrappleHook" type="Path3D" parent="."]
+top_level = true
+curve = SubResource("Curve3D_3a8hw")
+script = ExtResource("3_ayxa7")
+curve_mode = 1
+iter_min_dist = 0.504
+iter_add_last_point = false
+uv_size = 0.1
+material = SubResource("ShaderMaterial_r7cpj")
