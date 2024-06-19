@@ -1,28 +1,45 @@
 name: Build Godot Project
 
 on:
-  push: {}
-  pull_request: {}
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  Godot:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        platform: [linux, windows, mac]
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          lfs: true
-      - name: Build
-        id: build
-        uses: manleydev/build-godot-action@v1.4.1
-        with:
-          name: example
-          preset: ${{ matrix.platform }}
-          debugMode: "false"
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: Client - ${{ matrix.platform }}
-          path: ${{ github.workspace }}/${{ steps.build.outputs.build }}
+    build:
+        runs-on: ubuntu-latest
+        steps:
+          - uses: actions/checkout@v4
+            name: 🧾 Checkout
+            
+          - uses: chickensoft-games/setup-godot@v1
+            name: 🤖 Setup Godot
+            with:
+              # Version must include major, minor, and patch, and be >= 4.0.0
+              # Pre-release label is optional.
+              version: 4.2.2-stable # also valid: 4.0.0.rc1 or 4.0.0, etc
+              # Use .NET-enabled version of Godot (the default is also true).
+              use-dotnet: false
+              # Include the Godot Export Templtes (the default is false).
+              include-templates: true
+    
+          - name: 🔬 Verify Setup
+            run: |
+              godot --version
+          - name: Build project
+            run: |
+              mkdir builds builds/windows builds/macos builds/linux
+              godot --headless --path ./ --export-release windows builds/windows/game.exe
+              godot --headless --path ./ --export-release linux builds/linux/game.x86_64
+              godot --headless --path ./ --export-release macos builds/macos/game.zip
+
+          - uses: actions/upload-artifact@v4
+            with:
+                name: game
+                path: |
+                  builds/windows/
+                  builds/linux/
+                  builds/macos/
