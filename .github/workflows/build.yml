@@ -32,9 +32,9 @@ jobs:
           - name: Build project
             run: |
               mkdir builds builds/windows builds/macos builds/linux
-              godot --headless --path ./ --export-release windows builds/windows/game.exe
-              godot --headless --path ./ --export-release linux builds/linux/game.x86_64
-              godot --headless --path ./ --export-release macos builds/macos/game.zip
+              godot --headless --path ./ --export-release windows builds/windows/game.exe --quit --verbose
+              godot --headless --path ./ --export-release linux builds/linux/game.x86_64 --quit --verbose
+              godot --headless --path ./ --export-release macos builds/macos/game.zip --quit --verbose
 
           - uses: actions/upload-artifact@v4
             with:
