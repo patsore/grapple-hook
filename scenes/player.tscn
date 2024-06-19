@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=3 uid="uid://cyk3hy3amh3yg"]
 
-[ext_resource type="Script" path="res://character_controller.gd" id="1_7tgdb"]
-[ext_resource type="Script" path="res://camera_controller.gd" id="2_mlg4r"]
+[ext_resource type="Script" path="res://scripts/character_controller.gd" id="1_7tgdb"]
+[ext_resource type="Script" path="res://scripts/camera_controller.gd" id="2_mlg4r"]
 [ext_resource type="Script" path="res://addons/godot-polyliner/Line3D/LinePath3D.gd" id="3_ayxa7"]
 [ext_resource type="Shader" path="res://addons/godot-polyliner/shaders/parallax/raymarch_chain.gdshader" id="4_o6b44"]
 

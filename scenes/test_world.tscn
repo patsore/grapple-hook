@@ -3,7 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://pe7a4weirj2g" path="res://textures/dark.png" id="2_08fdt"]
 [ext_resource type="Texture2D" uid="uid://cxjxvqmf4boxq" path="res://textures/green.png" id="3_q4clv"]
 [ext_resource type="Texture2D" uid="uid://dsv4jm4vydflb" path="res://textures/orange.png" id="4_1ns5t"]
-[ext_resource type="PackedScene" uid="uid://cyk3hy3amh3yg" path="res://player.tscn" id="4_ad875"]
+[ext_resource type="PackedScene" uid="uid://cyk3hy3amh3yg" path="res://scenes/player.tscn" id="4_ad875"]
 
 [sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_edcox"]
 ground_color = Color(0.160784, 0.815686, 0.905882, 1)
