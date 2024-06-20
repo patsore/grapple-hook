@@ -44,5 +44,3 @@ func set_streets_and_buildings() -> void:
 						var cell_position = Vector3i(i + w, h, j + l)
 						set_cell_item(cell_position, 2)  # Building
 
-func _process(delta: float) -> void:
-	pass
