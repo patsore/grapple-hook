@@ -6,38 +6,40 @@ var gravity = default_gravity
 # Ground
 var walk_speed := 4.0
 var run_speed := 6.0
-var gr_accel := 20.0
+var gr_accel := 5.0
 
 # Air
 var air_speed := 3.0
 var air_accel := 20.0
 var max_air_velocity := 20.0
 
-
-
 # States
 var running := false
-var jump := false
-var crouched := false
-var grounded := false
 
 enum State {
 	WALKING,
 	FLYING,
-	WALLRUNNING
+	WALLRUNNING,
 }
 
 @onready var camera_controller: CameraController = $Head 
 @onready var wall_movement: WallMovement = $WallMovement
 @onready var grappling_hook: GrapplingHook = $GrapplingHook
 @onready var jumping: Jumping = $Jumping
+@onready var sliding: Sliding = $Sliding
+
+@onready var debug_label = $Head/MainCamera/Control/Label
+
+@onready var collision_shape: CollisionShape3D = $CollisionShape3D
 
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
+signal new_state(new_state: State)
+
 func _physics_process(delta):
 	var state = _compute_state()
-	
+	new_state.emit(state)
 	# Map inputs to character space
 	var input_vec = Input.get_vector("move_left", "move_right", "move_forward", "move_backwards")
 	
@@ -54,6 +56,14 @@ func _physics_process(delta):
 		State.WALLRUNNING:
 			wall_movement.wall_movement(delta, wish_dir)
 	
+	if Input.is_action_just_pressed("move_crouch") && running && is_on_floor():
+		#add boost
+		pass
+
+	if Input.is_action_pressed("move_crouch"):
+		sliding.crouch_or_slide()
+		pass
+	
 	if Input.is_action_just_pressed("move_jump"):
 		match state:
 			State.WALKING: 
@@ -68,6 +78,8 @@ func _physics_process(delta):
 	else:
 		gravity = default_gravity
 
+	debug_label.text = "Speed: %s, state: %s" % [velocity, state] 
+	
 	move_and_slide()
 
 func _compute_state() -> State:
@@ -89,6 +101,9 @@ func _air_move(delta, wish_dir, max_speed, acceleration):
 	velocity += wish_dir.normalized() * accelVel
 
 func _walk(wish_dir, max_speed, acceleration):
+	if Input.is_action_pressed("move_crouch") && velocity.length() > 2.5:
+		#do not walk when sliding
+		return
 	# Calculate current speed
 	var speed = Vector3(velocity.x, 0, velocity.z)
 	
@@ -108,10 +123,23 @@ func _walk(wish_dir, max_speed, acceleration):
 	# Update velocity
 	velocity += direction
 
-
 func _input(event):
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		grappling_hook.shoot_hook()
 		gravity = default_gravity * 0.25
 	if event is InputEventMouseButton and event.is_released() and event.button_index == MOUSE_BUTTON_LEFT:
 		grappling_hook.is_hooked = false
+
+var old_state: State = State.WALKING
+
+func _on_new_state(new_state: State) -> void:
+	if old_state != new_state:
+		print("changed state")
+		match old_state:
+			State.WALKING: 
+				pass
+			State.FLYING:
+				pass 
+			State.WALLRUNNING:
+				wall_movement.walljump()
+		old_state = new_state

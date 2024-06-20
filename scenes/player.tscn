@@ -1,12 +1,14 @@
-[gd_scene load_steps=8 format=3 uid="uid://cyk3hy3amh3yg"]
+[gd_scene load_steps=9 format=3 uid="uid://cyk3hy3amh3yg"]
 
 [ext_resource type="Script" path="res://scripts/character_controller.gd" id="1_7tgdb"]
 [ext_resource type="Script" path="res://scripts/camera_controller.gd" id="2_mlg4r"]
 [ext_resource type="Script" path="res://scripts/grappling_hook.gd" id="3_husmb"]
 [ext_resource type="Script" path="res://scripts/wallrunning.gd" id="4_nu13q"]
 [ext_resource type="Script" path="res://scripts/jumping.gd" id="5_2riwn"]
+[ext_resource type="Script" path="res://scripts/sliding.gd" id="6_1avth"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_m5mmo"]
+radius = 0.35
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_yby36"]
 
@@ -59,6 +61,13 @@ offset_bottom = 1.5
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="Label" type="Label" parent="Head/MainCamera/Control"]
+layout_mode = 0
+offset_left = -530.0
+offset_top = -275.0
+offset_right = -448.0
+offset_bottom = -237.0
+
 [node name="WeaponCamera" type="Camera3D" parent="Head"]
 visible = false
 
@@ -78,3 +87,8 @@ script = ExtResource("3_husmb")
 
 [node name="Jumping" type="Node" parent="."]
 script = ExtResource("5_2riwn")
+
+[node name="Sliding" type="Node" parent="."]
+script = ExtResource("6_1avth")
+
+[connection signal="new_state" from="." to="." method="_on_new_state"]

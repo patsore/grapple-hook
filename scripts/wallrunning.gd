@@ -21,7 +21,7 @@ var wall_stick_timer := 0.0
 @onready var right_cast = $"../Head/RightCast"
 @onready var camera_controller = $"../Head"
 
-func wall_movement(delta, wish_dir):
+func wall_movement(delta, wish_dir: Vector3):
 	# only one of the raycasts is colliding, therefore should wallrun
 	if left_cast.is_colliding() != right_cast.is_colliding():
 		var tilt_dir = 1 if left_cast.is_colliding() else -1
@@ -30,8 +30,12 @@ func wall_movement(delta, wish_dir):
 		var accelVel = wall_accel * delta
 		if projVel + accelVel > wall_speed:
 			accelVel = max(0, wall_speed - projVel)
-		parent.velocity += wish_dir.normalized() * accelVel
-		parent.velocity.y -= parent.gravity * delta * 0.0625
+		parent.velocity += (wish_dir.normalized() * accelVel)
+		parent.velocity.y -= (parent.gravity * delta * 0.0625)
+		var wall_normal = parent.get_wall_normal()
+		var projection = parent.velocity.dot(wall_normal) * wall_normal
+		parent.velocity = parent.velocity - projection * 0.5
+
 	else:
 		camera_controller.set_tilt(0)
 		parent.velocity.y -= parent.gravity * delta * 0.25
