@@ -90,7 +90,7 @@ func _on_hook_attached(point_of_contact: Vector3) -> void:
 	shifted_positions = false
 	
 	var push_direction = (point_of_contact - global_transform.origin).normalized()
-	parent.velocity += push_direction * initial_push_strength
+	parent.velocity += push_direction * initial_push_strength * Vector3(1, 0.75, 1)
 
 func _on_hook_detached() -> void:
 	is_attached = false
