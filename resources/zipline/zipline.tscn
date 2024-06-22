@@ -1,0 +1,31 @@
+[gd_scene load_steps=4 format=3 uid="uid://d8h8jj8m504u"]
+
+[ext_resource type="Material" uid="uid://bhjjk8op23nin" path="res://resources/zipline/zipline_material.tres" id="1_bjbti"]
+[ext_resource type="Script" path="res://scripts/zipline.gd" id="2_ci1js"]
+
+[sub_resource type="Curve3D" id="Curve3D_i44w5"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1.73755, -0.387611, 1.43768),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
+[node name="Zipline" type="Node3D"]
+
+[node name="CSGPolygon" type="CSGPolygon3D" parent="."]
+polygon = PackedVector2Array(0.2, 0, 0.141421, 0.141421, 1.22461e-17, 0.2, -0.141421, 0.141421, -0.2, 2.44921e-17, -0.141421, -0.141421, -3.67382e-17, -0.2, 0.141421, -0.141421)
+mode = 2
+path_node = NodePath("../Path3D")
+path_interval_type = 0
+path_interval = 1.0
+path_simplify_angle = 0.0
+path_rotation = 2
+path_local = false
+path_continuous_u = true
+path_u_distance = 1.0
+path_joined = false
+material = ExtResource("1_bjbti")
+script = ExtResource("2_ci1js")
+
+[node name="Path3D" type="Path3D" parent="."]
+curve = SubResource("Curve3D_i44w5")

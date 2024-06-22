@@ -1,0 +1,7 @@
+[gd_resource type="CylinderMesh" load_steps=2 format=3 uid="uid://wqqxy8wgtptu"]
+
+[ext_resource type="Material" uid="uid://bhjjk8op23nin" path="res://resources/zipline/zipline_material.tres" id="1_uisy8"]
+
+[resource]
+material = ExtResource("1_uisy8")
+radial_segments = 8

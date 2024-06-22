@@ -1,0 +1,21 @@
+[gd_resource type="StandardMaterial3D" load_steps=7 format=3 uid="uid://bhjjk8op23nin"]
+
+[ext_resource type="Texture2D" uid="uid://dhlrmly2dm31l" path="res://resources/zipline/zipline_textures/metal_0047_color_1k.jpg" id="1_61bj8"]
+[ext_resource type="Texture2D" uid="uid://chwycrv2mhbvi" path="res://resources/zipline/zipline_textures/metal_0047_ao_1k.jpg" id="2_2afn6"]
+[ext_resource type="Texture2D" uid="uid://dr8im2raxjrgh" path="res://resources/zipline/zipline_textures/metal_0047_height_1k.png" id="3_34vpr"]
+[ext_resource type="Texture2D" uid="uid://ea0c2xernn2p" path="res://resources/zipline/zipline_textures/metal_0047_metallic_1k.jpg" id="4_3154s"]
+[ext_resource type="Texture2D" uid="uid://cggm7xhfqiyg2" path="res://resources/zipline/zipline_textures/metal_0047_normal_direct_1k.png" id="5_xx8i8"]
+[ext_resource type="Texture2D" uid="uid://duaaboudg6rvx" path="res://resources/zipline/zipline_textures/metal_0047_roughness_1k.jpg" id="6_buxrk"]
+
+[resource]
+albedo_texture = ExtResource("1_61bj8")
+metallic = 1.0
+metallic_texture = ExtResource("4_3154s")
+roughness_texture = ExtResource("6_buxrk")
+normal_enabled = true
+normal_texture = ExtResource("5_xx8i8")
+ao_enabled = true
+ao_texture = ExtResource("2_2afn6")
+heightmap_enabled = true
+heightmap_texture = ExtResource("3_34vpr")
+uv1_triplanar = true

@@ -20,13 +20,18 @@ var shifted_positions: bool
 @export var initial_push_strength = 10.0
 
 @onready var hook_instance = MeshInstance3D.new()
-
+@onready var hook_path = $Path3D
+@onready var hook_mesh = $CSGPolygon
 func _ready():
 	hook_instance.mesh = SphereMesh.new()
 	hook_instance.name = "GrapplingHook"
 	hook_instance.top_level = true
 	add_child(hook_instance)
 	hook_instance.visible = false
+	
+	hook_mesh.top_level = true
+	hook_mesh.visible = false
+	#hook_path.top_level = true
 
 #Throws a grappling hook
 #that will attach to the first solid object it hits 
@@ -40,6 +45,9 @@ func shoot_grappling_hook():
 	# Make the hook visible and start moving it
 	hook_instance.visible = true
 	hook_target = direction
+	
+	hook_mesh.visible = true
+	
 	is_attached = false
 	# Move the hook forward in the specified direction
 	set_physics_process(true)
@@ -47,6 +55,8 @@ func shoot_grappling_hook():
 func _physics_process(delta):
 	if hook_instance.visible and not is_attached:
 		hook_instance.translate(hook_target * hook_speed * delta)
+		hook_mesh.global_transform.origin = global_transform.origin
+		hook_path.curve.set_point_position(1, hook_instance.global_transform.origin)
 		# Check for collision
 		var space_state = get_world_3d().direct_space_state
 		var query = PhysicsRayQueryParameters3D.create(hook_instance.global_transform.origin, hook_instance.global_transform.origin + hook_target * hook_speed * delta, 0x0000000F)
