@@ -46,7 +46,7 @@ func _ready():
 
 # Update the zipline visuals
 func update_zipline():
-	var start_position = to_local(head.global_transform.origin) - Vector3(0.3, 0.5, 0)
+	var start_position = to_local(head.global_transform.origin) - Vector3(0.3, 0.75, 0)
 	var end_position = to_local(hook_instance.global_transform.origin)
 	
 	var curve = Curve3D.new()
@@ -67,7 +67,7 @@ func update_zipline():
 		if i <= line_segments - 1:
 			var next_position = curve.sample_baked(float(i + 1) / float(line_segments))
 			var direction = (next_position - position).normalized()
-			point_transform.basis = Basis(Vector3.LEFT, direction, Vector3.UP)
+			point_transform.basis = Basis(Vector3.LEFT if i != 0 else Vector3.RIGHT, direction, Vector3.UP)
 		
 		mesh_instance.multimesh.set_instance_transform(i, point_transform)
 
