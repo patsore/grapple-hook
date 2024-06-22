@@ -4,4 +4,6 @@
 
 [resource]
 material = ExtResource("1_uisy8")
+top_radius = 0.05
+bottom_radius = 0.05
 radial_segments = 8

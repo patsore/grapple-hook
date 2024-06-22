@@ -1,25 +1,16 @@
-[gd_scene load_steps=12 format=3 uid="uid://cyk3hy3amh3yg"]
+[gd_scene load_steps=9 format=3 uid="uid://cyk3hy3amh3yg"]
 
 [ext_resource type="Script" path="res://scripts/character_controller.gd" id="1_7tgdb"]
 [ext_resource type="Script" path="res://scripts/camera_controller.gd" id="2_mlg4r"]
 [ext_resource type="Script" path="res://scripts/wallrunning.gd" id="4_nu13q"]
 [ext_resource type="Script" path="res://scripts/jumping.gd" id="5_2riwn"]
 [ext_resource type="Script" path="res://scripts/sliding.gd" id="6_1avth"]
-[ext_resource type="Material" uid="uid://bhjjk8op23nin" path="res://resources/zipline/zipline_material.tres" id="7_4wrip"]
 [ext_resource type="Script" path="res://scripts/grappling_hook.gd" id="7_n6l14"]
-[ext_resource type="Script" path="res://scripts/zipline.gd" id="8_lts5a"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_m5mmo"]
 radius = 0.35
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_yby36"]
-
-[sub_resource type="Curve3D" id="Curve3D_a6oks"]
-_data = {
-"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0.5, 0, 0, 0, 0, 0, 0, 0, 0, 0.1, 0, 0),
-"tilts": PackedFloat32Array(0, 0)
-}
-point_count = 2
 
 [node name="Player" type="CharacterBody3D"]
 collision_layer = 128
@@ -102,24 +93,6 @@ script = ExtResource("7_n6l14")
 hook_speed = 100.0
 retract_speed = 15.0
 initial_push_strength = 15.0
-
-[node name="CSGPolygon" type="CSGPolygon3D" parent="GrapplingHook"]
-polygon = PackedVector2Array(0.2, 0, 0.141421, 0.141421, 1.22461e-17, 0.2, -0.141421, 0.141421, -0.2, 2.44921e-17, -0.141421, -0.141421, -3.67382e-17, -0.2, 0.141421, -0.141421)
-mode = 2
-path_node = NodePath("../Path3D")
-path_interval_type = 0
-path_interval = 1.0
-path_simplify_angle = 0.0
-path_rotation = 2
-path_local = false
-path_continuous_u = true
-path_u_distance = 1.0
-path_joined = false
-material = ExtResource("7_4wrip")
-script = ExtResource("8_lts5a")
-
-[node name="Path3D" type="Path3D" parent="GrapplingHook"]
-curve = SubResource("Curve3D_a6oks")
 
 [connection signal="new_state" from="." to="WallMovement" method="_on_player_new_state"]
 [connection signal="hook_attached" from="GrapplingHook" to="." method="_on_new_grappling_hook_hook_attached"]
