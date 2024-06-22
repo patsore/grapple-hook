@@ -73,7 +73,7 @@ func _physics_process(delta):
 			State.WALLRUNNING:
 				wall_movement.walljump()
 
-	debug_label.text = "Speed: %s, state: %s" % [velocity, state] 
+	debug_label.text = "Speed: %s, state: %s, position: %s" % [velocity, state, global_transform.origin] 
 	
 	move_and_slide()
 
