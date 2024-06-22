@@ -24,7 +24,7 @@ enum State {
 
 @onready var camera_controller: CameraController = $Head 
 @onready var wall_movement: WallMovement = $WallMovement
-@onready var grappling_hook: GrapplingHook = $GrapplingHook
+
 @onready var jumping: Jumping = $Jumping
 @onready var sliding: Sliding = $Sliding
 
@@ -35,11 +35,11 @@ enum State {
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
-signal new_state(new_state: State)
+signal new_state(old_state: State, new_state: State)
 
 func _physics_process(delta):
 	var state = _compute_state()
-	new_state.emit(state)
+	on_new_state(state)
 	# Map inputs to character space
 	var input_vec = Input.get_vector("move_left", "move_right", "move_forward", "move_backwards")
 	
@@ -63,7 +63,7 @@ func _physics_process(delta):
 	if Input.is_action_pressed("move_crouch"):
 		sliding.crouch_or_slide()
 		pass
-	
+
 	if Input.is_action_just_pressed("move_jump"):
 		match state:
 			State.WALKING: 
@@ -72,11 +72,6 @@ func _physics_process(delta):
 				jumping.doublejump(wish_dir) 
 			State.WALLRUNNING:
 				wall_movement.walljump()
-
-	if grappling_hook.is_hooked:
-		grappling_hook.retract_hook()
-	else:
-		gravity = default_gravity
 
 	debug_label.text = "Speed: %s, state: %s" % [velocity, state] 
 	
@@ -123,23 +118,15 @@ func _walk(wish_dir, max_speed, acceleration):
 	# Update velocity
 	velocity += direction
 
-func _input(event):
-	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-		grappling_hook.shoot_hook()
-		gravity = default_gravity * 0.25
-	if event is InputEventMouseButton and event.is_released() and event.button_index == MOUSE_BUTTON_LEFT:
-		grappling_hook.is_hooked = false
-
 var old_state: State = State.WALKING
 
-func _on_new_state(new_state: State) -> void:
-	if old_state != new_state:
-		print("changed state")
-		match old_state:
-			State.WALKING: 
-				pass
-			State.FLYING:
-				pass 
-			State.WALLRUNNING:
-				wall_movement.walljump()
-		old_state = new_state
+func on_new_state(state: State) -> void:
+	if old_state != state:
+		new_state.emit(old_state, state)
+		old_state = state
+
+func _on_new_grappling_hook_hook_attached(point_of_contact: Vector3) -> void:
+	gravity = default_gravity * 0.25 # Replace with function body.
+
+func _on_new_grappling_hook_hook_detached() -> void:
+	gravity = default_gravity # Replace with function body.

@@ -2,10 +2,10 @@
 
 [ext_resource type="Script" path="res://scripts/character_controller.gd" id="1_7tgdb"]
 [ext_resource type="Script" path="res://scripts/camera_controller.gd" id="2_mlg4r"]
-[ext_resource type="Script" path="res://scripts/grappling_hook.gd" id="3_husmb"]
 [ext_resource type="Script" path="res://scripts/wallrunning.gd" id="4_nu13q"]
 [ext_resource type="Script" path="res://scripts/jumping.gd" id="5_2riwn"]
 [ext_resource type="Script" path="res://scripts/sliding.gd" id="6_1avth"]
+[ext_resource type="Script" path="res://scripts/grappling_hook.gd" id="7_n6l14"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_m5mmo"]
 radius = 0.35
@@ -13,7 +13,6 @@ radius = 0.35
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_yby36"]
 
 [node name="Player" type="CharacterBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 7)
 collision_layer = 128
 collision_mask = 129
 floor_block_on_wall = false
@@ -82,13 +81,19 @@ collide_with_areas = true
 [node name="WallMovement" type="Node" parent="."]
 script = ExtResource("4_nu13q")
 
-[node name="GrapplingHook" type="Node" parent="."]
-script = ExtResource("3_husmb")
-
 [node name="Jumping" type="Node" parent="."]
 script = ExtResource("5_2riwn")
 
 [node name="Sliding" type="Node" parent="."]
 script = ExtResource("6_1avth")
 
-[connection signal="new_state" from="." to="." method="_on_new_state"]
+[node name="GrapplingHook" type="Node3D" parent="."]
+script = ExtResource("7_n6l14")
+hook_speed = 100.0
+retract_speed = 15.0
+
+[connection signal="new_state" from="." to="WallMovement" method="_on_player_new_state"]
+[connection signal="hook_attached" from="GrapplingHook" to="." method="_on_new_grappling_hook_hook_attached"]
+[connection signal="hook_attached" from="GrapplingHook" to="GrapplingHook" method="_on_hook_attached"]
+[connection signal="hook_detached" from="GrapplingHook" to="." method="_on_new_grappling_hook_hook_detached"]
+[connection signal="hook_detached" from="GrapplingHook" to="GrapplingHook" method="_on_hook_detached"]
