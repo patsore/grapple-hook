@@ -3,10 +3,7 @@ name: Build Godot Project
 on:
   push:
     branches:
-      - master
-  pull_request:
-    branches:
-      - main
+      - build
 
 jobs:
     build:
