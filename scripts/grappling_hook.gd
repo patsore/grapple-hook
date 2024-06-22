@@ -16,8 +16,10 @@ var shifted_positions: bool
 @export var max_distance = 100
 @export var initial_push_strength = 10.0
 
-@onready var hook_instance = MeshInstance3D.new()
+@export var line_segments = 10
 
+@onready var hook_instance = MeshInstance3D.new()
+@onready var zip_mesh: CylinderMesh = load("res://resources/zipline/zipline_mesh.tres")
 # New nodes for the zipline
 var path: Path3D = Path3D.new()
 var mesh_instance: MultiMeshInstance3D = MultiMeshInstance3D.new()
@@ -34,15 +36,18 @@ func _ready():
 	path.name = "ZiplinePath"
 	
 	mesh_instance.multimesh = MultiMesh.new()
-	mesh_instance.multimesh.mesh = load("res://resources/zipline/zipline_mesh.tres")
 	mesh_instance.multimesh.transform_format = MultiMesh.TRANSFORM_3D
+	mesh_instance.multimesh.instance_count = line_segments
+	mesh_instance.multimesh.mesh = zip_mesh
+	
 	add_child(mesh_instance)
+	set_physics_process(false)
 	mesh_instance.visible = false
 
 # Update the zipline visuals
 func update_zipline():
-	var start_position = head.global_transform.origin + Vector3(1, 0, 0)
-	var end_position = hook_instance.global_transform.origin
+	var start_position = to_local(head.global_transform.origin) - Vector3(0.3, 0.5, 0)
+	var end_position = to_local(hook_instance.global_transform.origin)
 	
 	var curve = Curve3D.new()
 	curve.add_point(start_position)
@@ -50,12 +55,21 @@ func update_zipline():
 	path.curve = curve
 	
 	var distance = start_position.distance_to(end_position)
-	var segments = int(distance)
-	mesh_instance.multimesh.instance_count = segments
-	for i in range(segments):
-		var t = float(i) / float(segments)
-		var transform = curve.sample_baked_with_rotation(t * distance)
-		mesh_instance.multimesh.set_instance_transform(i, transform)
+	var segment_length = distance / line_segments
+	zip_mesh.height = segment_length
+
+	for i in range(line_segments):
+		var t = segment_length * i
+		var position = curve.sample_baked(t)
+		var point_transform = Transform3D()
+		point_transform.origin = position
+		
+		if i <= line_segments - 1:
+			var next_position = curve.sample_baked(float(i + 1) / float(line_segments))
+			var direction = (next_position - position).normalized()
+			point_transform.basis = Basis(Vector3.LEFT, direction, Vector3.UP)
+		
+		mesh_instance.multimesh.set_instance_transform(i, point_transform)
 
 func shoot_grappling_hook():
 	hook_instance.global_transform.origin = head.global_transform.origin
@@ -63,6 +77,7 @@ func shoot_grappling_hook():
 	hook_instance.global_transform.origin += direction * 2.0
 	
 	hook_instance.visible = true
+	mesh_instance.visible = true
 	hook_target = direction
 	is_attached = false
 	set_physics_process(true)
