@@ -25,6 +25,7 @@ var rotation_quat = Quaternion()
 
 func _ready():
 	main_camera = get_node("MainCamera")
+	#main_camera.get_viewport().debug_draw = Viewport.DEBUG_DRAW_NORMAL_BUFFER
 	weapon_camera = get_node("WeaponCamera")
 	rb = get_parent_node_3d()
 	cur_tilt = rotation_quat.get_euler().z
