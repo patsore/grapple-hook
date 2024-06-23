@@ -1,11 +1,12 @@
-[gd_scene load_steps=12 format=3 uid="uid://balyp5pugacla"]
+[gd_scene load_steps=13 format=3 uid="uid://balyp5pugacla"]
 
 [ext_resource type="PackedScene" uid="uid://cyk3hy3amh3yg" path="res://scenes/player.tscn" id="2_kquyu"]
-[ext_resource type="Script" path="res://scripts/map.gd" id="2_mnj02"]
-[ext_resource type="Material" uid="uid://h0sdlevcsy36" path="res://addons/kenney_prototype_tools/materials/dark/material_06.tres" id="2_to75k"]
+[ext_resource type="Script" path="res://scripts/map/map.gd" id="2_mnj02"]
 [ext_resource type="Script" path="res://scripts/map/ground.gd" id="3_c2k85"]
+[ext_resource type="Material" uid="uid://bx6qeabdhq2s" path="res://addons/kenney_prototype_tools/materials/dark/material_01.tres" id="4_svs2b"]
 [ext_resource type="Script" path="res://scripts/map/buildings.gd" id="5_kqxu4"]
 [ext_resource type="Material" uid="uid://c4m3pqbl84uhl" path="res://addons/kenney_prototype_tools/materials/purple/material_02.tres" id="6_6023j"]
+[ext_resource type="Script" path="res://scripts/map/world_border.gd" id="7_vnpw7"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_xaajt"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -47,7 +48,7 @@ street_spacing = 20
 script = ExtResource("3_c2k85")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Map/Ground"]
-material_override = ExtResource("2_to75k")
+material_override = ExtResource("4_svs2b")
 mesh = SubResource("PlaneMesh_udkvp")
 skeleton = NodePath("../..")
 
@@ -57,5 +58,9 @@ shape = SubResource("BoxShape3D_118q7")
 [node name="Buildings" type="Node3D" parent="Map"]
 script = ExtResource("5_kqxu4")
 max_building_height = 30
-min_building_height = 5
+min_building_height = 15
+building_scale = 5
 building_material = ExtResource("6_6023j")
+
+[node name="WorldBorder" type="Node3D" parent="Map"]
+script = ExtResource("7_vnpw7")

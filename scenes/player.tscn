@@ -1,11 +1,11 @@
 [gd_scene load_steps=9 format=3 uid="uid://cyk3hy3amh3yg"]
 
-[ext_resource type="Script" path="res://scripts/character_controller.gd" id="1_7tgdb"]
-[ext_resource type="Script" path="res://scripts/camera_controller.gd" id="2_mlg4r"]
-[ext_resource type="Script" path="res://scripts/wallrunning.gd" id="4_nu13q"]
-[ext_resource type="Script" path="res://scripts/jumping.gd" id="5_2riwn"]
-[ext_resource type="Script" path="res://scripts/sliding.gd" id="6_1avth"]
-[ext_resource type="Script" path="res://scripts/grappling_hook.gd" id="7_n6l14"]
+[ext_resource type="Script" path="res://scripts/character/character_controller.gd" id="1_7tgdb"]
+[ext_resource type="Script" path="res://scripts/character/camera_controller.gd" id="2_mlg4r"]
+[ext_resource type="Script" path="res://scripts/character/wallrunning.gd" id="4_nu13q"]
+[ext_resource type="Script" path="res://scripts/character/jumping.gd" id="5_2riwn"]
+[ext_resource type="Script" path="res://scripts/character/sliding.gd" id="6_1avth"]
+[ext_resource type="Script" path="res://scripts/character/grappling_hook.gd" id="7_n6l14"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_m5mmo"]
 radius = 0.35
@@ -14,7 +14,7 @@ radius = 0.35
 
 [node name="Player" type="CharacterBody3D"]
 collision_layer = 128
-collision_mask = 129
+collision_mask = 131
 floor_block_on_wall = false
 script = ExtResource("1_7tgdb")
 
