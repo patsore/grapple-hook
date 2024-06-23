@@ -35,9 +35,7 @@ environment = SubResource("Environment_dlxy4")
 transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 16, 0)
 shadow_enabled = true
 shadow_opacity = 0.71
-shadow_blur = 10.0
-directional_shadow_mode = 0
-directional_shadow_fade_start = 0.1
+shadow_blur = 1.641
 
 [node name="Player" parent="." instance=ExtResource("2_kquyu")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)

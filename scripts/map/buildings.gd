@@ -4,8 +4,8 @@ extends Node3D
 
 @onready var noise = FastNoiseLite.new()
 
-@export var max_building_height = 50
-@export var min_building_height = 5
+@export var max_building_height = 5
+@export var min_building_height = 1
 
 @export var building_material = load("res://addons/kenney_prototype_tools/materials/purple/material_02.tres")
 
@@ -23,4 +23,4 @@ func _ready():
 				var building = Building.new(parent.street_spacing - parent.street_width, min_building_height, max_building_height)
 				building.transform.origin = Vector3(x, 0, y)
 				add_child(building)
-				building.mesh.surface_set_material(0, building_material)
+				#building.mesh.surface_set_material(0, building_material)
