@@ -26,7 +26,7 @@ var rotation_quat = Quaternion()
 func _ready():
 	main_camera = get_node("MainCamera")
 	#main_camera.get_viewport().debug_draw = Viewport.DEBUG_DRAW_NORMAL_BUFFER
-	weapon_camera = get_node("WeaponCamera")
+	weapon_camera = get_node("SubViewportContainer/SubViewport/WeaponCamera")
 	rb = get_parent_node_3d()
 	cur_tilt = rotation_quat.get_euler().z
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -36,7 +36,6 @@ func _physics_process(_delta):
 	fov = lerp(fov, base_fov + added_fov, 0.5)
 	fov = clamp(fov, base_fov, max_fov)
 	main_camera.fov = fov
-	weapon_camera.fov = fov
 
 	current_look = current_look.lerp(current_look + sway, 0.8)
 	cur_tilt = lerp_angle(cur_tilt, wish_tilt, 0.1)

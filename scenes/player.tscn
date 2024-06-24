@@ -1,7 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://cyk3hy3amh3yg"]
+[gd_scene load_steps=11 format=3 uid="uid://cyk3hy3amh3yg"]
 
 [ext_resource type="Script" path="res://scripts/character/character_controller.gd" id="1_7tgdb"]
 [ext_resource type="Script" path="res://scripts/character/camera_controller.gd" id="2_mlg4r"]
+[ext_resource type="PackedScene" uid="uid://cry1sc40o5to" path="res://scenes/weapons_scene.tscn" id="3_bljdq"]
+[ext_resource type="Script" path="res://scripts/animations/subviewport_controller.gd" id="3_yvgd2"]
 [ext_resource type="Script" path="res://scripts/character/wallrunning.gd" id="4_nu13q"]
 [ext_resource type="Script" path="res://scripts/character/jumping.gd" id="5_2riwn"]
 [ext_resource type="Script" path="res://scripts/character/sliding.gd" id="6_1avth"]
@@ -32,6 +34,7 @@ sens_x = 0.001
 sens_y = 0.001
 
 [node name="MainCamera" type="Camera3D" parent="Head"]
+cull_mask = 1048573
 
 [node name="Control" type="Control" parent="Head/MainCamera"]
 layout_mode = 3
@@ -68,9 +71,6 @@ offset_top = -275.0
 offset_right = -448.0
 offset_bottom = -237.0
 
-[node name="WeaponCamera" type="Camera3D" parent="Head"]
-visible = false
-
 [node name="LeftCast" type="RayCast3D" parent="Head"]
 target_position = Vector3(-0.75, 0, 0)
 collide_with_areas = true
@@ -78,6 +78,24 @@ collide_with_areas = true
 [node name="RightCast" type="RayCast3D" parent="Head"]
 target_position = Vector3(0.75, 0, 0)
 collide_with_areas = true
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="Head"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SubViewport" type="SubViewport" parent="Head/SubViewportContainer"]
+transparent_bg = true
+handle_input_locally = false
+render_target_update_mode = 4
+script = ExtResource("3_yvgd2")
+
+[node name="WeaponCamera" type="Camera3D" parent="Head/SubViewportContainer/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.380446, -0.284484)
+cull_mask = 1047554
+fov = 80.0
 
 [node name="WallMovement" type="Node" parent="."]
 script = ExtResource("4_nu13q")
@@ -94,7 +112,15 @@ hook_speed = 100.0
 retract_speed = 15.0
 initial_push_strength = 15.0
 
+[node name="WeaponsScene" parent="." instance=ExtResource("3_bljdq")]
+transform = Transform3D(-0.01, 0, -8.74228e-10, 0, 0.01, 0, 8.74228e-10, 0, -0.01, 0, -0.032, 0)
+
+[node name="RemoteTransform3D" type="RemoteTransform3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.380446, -0.284484)
+remote_path = NodePath("../Head/SubViewportContainer/SubViewport/WeaponCamera")
+
 [connection signal="new_state" from="." to="WallMovement" method="_on_player_new_state"]
+[connection signal="new_state" from="." to="WeaponsScene" method="_on_player_new_state"]
 [connection signal="hook_attached" from="GrapplingHook" to="." method="_on_new_grappling_hook_hook_attached"]
 [connection signal="hook_attached" from="GrapplingHook" to="GrapplingHook" method="_on_hook_attached"]
 [connection signal="hook_detached" from="GrapplingHook" to="." method="_on_new_grappling_hook_hook_detached"]

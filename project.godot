@@ -66,6 +66,11 @@ grapple={
 ]
 }
 
+[layer_names]
+
+3d_render/layer_1="World"
+3d_render/layer_2="Weapons"
+
 [physics]
 
 3d/physics_engine="JoltPhysics3D"
