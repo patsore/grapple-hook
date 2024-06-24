@@ -23,15 +23,17 @@ var weapon_camera: Camera3D
 var fov: float
 var rotation_quat = Quaternion()
 
+@onready var camera_pos: BoneAttachment3D = $"../WeaponsScene/Node/Skeleton3D/BoneAttachment3D"
+
 func _ready():
 	main_camera = get_node("MainCamera")
 	#main_camera.get_viewport().debug_draw = Viewport.DEBUG_DRAW_NORMAL_BUFFER
-	weapon_camera = get_node("SubViewportContainer/SubViewport/WeaponCamera")
 	rb = get_parent_node_3d()
 	cur_tilt = rotation_quat.get_euler().z
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 func _physics_process(_delta):
+	main_camera.global_transform.origin = camera_pos.global_transform.origin + 20 * camera_pos.global_transform.basis.z
 	var added_fov = rb.velocity.length() - 3.44
 	fov = lerp(fov, base_fov + added_fov, 0.5)
 	fov = clamp(fov, base_fov, max_fov)
@@ -59,12 +61,16 @@ func _input(event):
 		transform.basis = Basis(rotation_quat)
 		get_parent().transform.basis = Basis(Quaternion(Vector3.UP, current_look.x))
 
-func _process(_delta):
+func _process(delta):
 	if Input.is_action_just_pressed("ui_cancel"):
 		if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 		elif Input.mouse_mode == Input.MOUSE_MODE_VISIBLE:
 			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	#if Input.is_action_pressed("move_crouch") && rb.is_on_floor():
+		#main_camera.transform.origin = lerp(main_camera.transform.origin, Vector3(0, -0.5, 0), 0.25)
+	#else:
+		#main_camera.transform.origin = lerp(main_camera.transform.origin, Vector3.ZERO, 0.25)
 
 func punch(dir: Vector2):
 	sway += dir

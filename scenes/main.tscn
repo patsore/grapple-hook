@@ -41,7 +41,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
 
 [node name="Map" type="Node3D" parent="."]
 script = ExtResource("2_mnj02")
-street_width = 6
+street_width = 5
 street_spacing = 20
 
 [node name="Ground" type="StaticBody3D" parent="Map"]

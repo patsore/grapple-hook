@@ -3,6 +3,7 @@ extends Node3D
 
 signal hook_attached(point_of_contact: Vector3)
 signal hook_detached
+signal hook_shot(direction: Vector3)
 
 var hook_target: Vector3
 var is_attached: bool
@@ -81,6 +82,7 @@ func shoot_grappling_hook():
 	hook_target = direction
 	is_attached = false
 	set_physics_process(true)
+	hook_shot.emit(direction)
 
 func _physics_process(delta):
 	if hook_instance.visible and not is_attached:
