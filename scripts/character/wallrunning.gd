@@ -40,7 +40,6 @@ func walljump():
 		var jump_direction = (wall_normal.normalized() * 2 - parent.transform.basis.z.normalized()).normalized() * wall_jump_power * 3
 		var y_vel = parent.velocity.y 
 		var y_vel_negation = abs(y_vel) if y_vel < 0 else 0
-		print(y_vel_negation)
 		parent.velocity += jump_direction + Vector3(0, wall_jump_power * 1.5 + y_vel_negation, 0)
 		can_walljump = false
 		var timer = get_tree().create_timer(0.3)

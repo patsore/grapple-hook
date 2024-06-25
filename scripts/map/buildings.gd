@@ -14,7 +14,7 @@ func _ready():
 	noise.noise_type = FastNoiseLite.TYPE_PERLIN
 	noise.frequency = 0.09
 
-	var starting_coordinate = Vector2(-parent.map_size / 2, -parent.map_size / 2)
+	#var starting_coordinate = Vector2(-parent.map_size / 2, -parent.map_size / 2)
 	for x in range(-parent.map_size / 2, parent.map_size / 2):
 		if x % parent.street_spacing != 0:
 			continue
