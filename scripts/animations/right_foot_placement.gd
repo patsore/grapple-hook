@@ -37,7 +37,8 @@ func _process(delta: float) -> void:
 			
 			var default_rotation = quat_2 * quat_1
 			var normal: Vector3 = result.normal
-			var angle = Vector3.UP.signed_angle_to(normal, root.global_transform.basis.z)
-			var quat_3 = Quaternion(Vector3.FORWARD, angle)
+			var angle: float = Vector3.UP.signed_angle_to(normal, root.global_transform.basis.z)
+
+			var quat_3 = Quaternion(Vector3.FORWARD if angle <= 0 else Vector3.BACK, abs(angle))
 			marker.basis = Basis(quat_3 * quat_2 * quat_1)
 			break
