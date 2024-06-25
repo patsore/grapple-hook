@@ -23,7 +23,7 @@ var weapon_camera: Camera3D
 var fov: float
 var rotation_quat = Quaternion()
 
-@onready var camera_pos: BoneAttachment3D = $"../WeaponsScene/Node/Skeleton3D/BoneAttachment3D"
+@onready var camera_pos: BoneAttachment3D = $"../WeaponsScene/Node/Skeleton3D/NeckBone"
 
 func _ready():
 	main_camera = get_node("MainCamera")

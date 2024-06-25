@@ -21,7 +21,7 @@ func _process(delta: float) -> void:
 		state = State.RUNNING
 	elif player.velocity.length() <= 1.0:
 		state = State.IDLE
-	elif player.is_on_floor():
+	elif player.is_on_floor() || player.is_on_wall():
 		state = State.WALKING
 	else:
 		state = State.IDLE

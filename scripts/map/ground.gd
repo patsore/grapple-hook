@@ -11,7 +11,7 @@ func _ready() -> void:
 	var shape = BoxShape3D.new()
 	shape.set_size(Vector3(parent.map_size, 1, parent.map_size))
 	collision_shape.set_shape(shape)
-	collision_shape.transform.origin -= Vector3(0, -0.5, 0)
+	collision_shape.transform.origin = Vector3(0, -0.5, 0)
 	
 	var mesh = PlaneMesh.new()
 	mesh.set_size(Vector2(parent.map_size, parent.map_size))
