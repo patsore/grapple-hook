@@ -5,22 +5,21 @@ extends BoneAttachment3D
 func _ready() -> void:
 	pass
 
-@export var RAY_LENGTH = 1.5
+@export var RAY_LENGTH = 3.0
 
 @onready var marker =  $"../../LeftFootMarker"
+
+@onready var root = $"../../.."
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	var start_position = global_transform.origin
 	var space_state = get_world_3d().direct_space_state
 
-	var closest_point: Vector3 = Vector3.ZERO
-	var closest_distance: float = RAY_LENGTH
-
 	var directions = [
+		Vector3(0, -0.3, 0), # Down
 		Vector3(1, 0, 0),  # Right
 		Vector3(-1, 0, 0), # Left
-		Vector3(0, -1, 0), # Down
 		Vector3(0, 0, 1),  # Forward
 		Vector3(0, 0, -1)  # Backward
 	]
@@ -30,9 +29,20 @@ func _process(delta: float) -> void:
 			start_position + direction * RAY_LENGTH, 0x0000000F)
 		var result = space_state.intersect_ray(query)
 
-		if result:
+		if !result.is_empty():
+			var closest_point = result.position
 			var distance = start_position.distance_to(result.position)
-			if distance < closest_distance:
-				closest_distance = distance
-				closest_point = result.position
-	marker.global_transform.origin = closest_point
+			
+			marker.global_transform.origin = closest_point
+			
+			var quat_1 = Quaternion(Vector3.UP, PI)
+			var quat_2 = Quaternion(Vector3.RIGHT, PI/2)
+			
+			var default_rotation = quat_2 * quat_1
+			var normal: Vector3 = result.normal
+			var angle: float = Vector3.UP.signed_angle_to(normal, root.global_transform.basis.z)
+			print(angle)
+			var quat_3 = Quaternion(Vector3.FORWARD if angle.positive() else Vector3.BACK, angle)
+			marker.basis = Basis(quat_3 * quat_2 * quat_1)
+			
+			break
